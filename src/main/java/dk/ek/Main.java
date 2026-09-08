@@ -10,6 +10,11 @@ import lombok.NonNull;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static void main() throws InterruptedException {
+
+
+    }
+    public void test() throws InterruptedException{
+
         Person person = new Person("Holger",33);
         System.out.println("Hi from " + Thread.currentThread().getName());
         Thread thread1 = new Thread(() -> System.out.println("Hi from " + Thread.currentThread().getName()));
@@ -29,19 +34,8 @@ public class Main {
         thread2.join();
         System.out.println("After join: "+person);
         System.out.println("Finish program");
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
     private static class MyRunnable implements Runnable{
         Person person;
         public MyRunnable(Person person){

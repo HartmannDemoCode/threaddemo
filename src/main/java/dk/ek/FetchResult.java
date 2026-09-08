@@ -1,9 +1,12 @@
 package dk.ek;
 
+import lombok.Data;
+
 public record FetchResult(
         String url,
         int statusCode,
         int responseSize,
         long durationMs,
-        String threadName
+        String threadName,
+        String content
 ) {}
