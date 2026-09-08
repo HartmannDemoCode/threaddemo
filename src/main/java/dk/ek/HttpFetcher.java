@@ -10,9 +10,9 @@ import java.time.Duration;
 
 public class HttpFetcher {
     static void main() {
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(5))
-                .build();
+        try(HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build()){
+
+        }
     }
     public FetchResult fetch(HttpClient client, String url){
         // 1. Build an HttpRequest for the URL.
@@ -38,5 +38,6 @@ public class HttpFetcher {
         } catch (URISyntaxException | InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 }
