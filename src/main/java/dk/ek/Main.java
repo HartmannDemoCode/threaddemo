@@ -6,11 +6,52 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static void main() throws InterruptedException {
+        HttpFetcher fetcher = new HttpFetcher();
+        String[] urls = new String[]{
+                "https://icanhazdadjoke.com/"
+                ,"https://api.chucknorris.io/jokes/random"
+                ,"https://api.kanye.rest"
+                ,"https://api.whatdoestrumpthink.com/api/v1/quotes/random"
+//                ,"https://v2.jokeapi.dev/joke/Coding?type=single"
+//                ,"https://geek-jokes.sameerkumar.website/api?format=json"
+//                ,"https://official-joke-api.appspot.com/random_joke"
+        };
+        List<Callable<String>> callableList = new ArrayList<>();
+        List<Future<String>> futureList = new ArrayList<>();
+        List<String> jokes = new ArrayList<>();
+        for(String url : urls){
+            String url1 = url;
+            Callable<String> callable = ()->{
+                return fetcher.fetch(url).content();
+            };
+            callableList.add(callable);
+        }
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for(Callable<String> callable : callableList){
+            Future<String> future = executorService.submit(callable);
+            futureList.add(future);
+        }
+        for(Future<String> future: futureList.subList(0,3)){
+            try {
+                String joke = future.get();
+                jokes.add(joke);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println(jokes);
 
+
+//        FetchResult fr = fetcher.fetch(urls[3]);
+//        System.out.println(fr.content());
 
     }
     public void test() throws InterruptedException{
@@ -55,4 +96,16 @@ public class Main {
 //        @NonNull
         int age;
     }
+
+    @Data
+    @AllArgsConstructor
+    private static class JokesDTO{
+        String dadJoke;
+        String chuckJoke;
+        String kanyeJoke;
+        String trumpJoke;
+    }
+    private static record dad(
+
+    ){ }
 }
