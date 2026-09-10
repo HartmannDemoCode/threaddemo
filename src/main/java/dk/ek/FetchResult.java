@@ -1,7 +1,5 @@
 package dk.ek;
 
-import lombok.Data;
-
 public record FetchResult(
         String url,
         int statusCode,
